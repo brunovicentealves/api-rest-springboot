@@ -7,10 +7,7 @@ import br.com.spring.awesome.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -44,6 +41,13 @@ public class StudentEndpoint {
         }
         return  new ResponseEntity<>(Student.studentList.get(index),HttpStatus.OK);
     }
+
+    @PostMapping("/salvar")
+    public ResponseEntity<?>saveStudenty(@RequestBody Student student){
+        Student.studentList.add(student);
+        return new ResponseEntity<>(student,HttpStatus.OK);
+    }
+
 
 
 
