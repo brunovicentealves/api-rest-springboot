@@ -1,52 +1,51 @@
 package br.com.spring.awesome.endpoint;
 
 
+import br.com.spring.awesome.Repository.StudentyRepository;
 import br.com.spring.awesome.error.CustomErrorType;
 import br.com.spring.awesome.model.Student;
-import br.com.spring.awesome.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
-import static java.util.Arrays.asList;
-
 @RestController
 @RequestMapping("students")
 public class StudentEndpoint {
-
-    private DateUtil dateUtil;
-
     @Autowired
-    public StudentEndpoint(DateUtil dateUtil) {
-        this.dateUtil = dateUtil;
-    }
+    private StudentyRepository studentyRepository;
 
-    @GetMapping("/list")
-    public ResponseEntity<?>nselistAll(){
-        System.out.println("--->>>"+dateUtil.formatLocalDateTimeToDataBaseStyle(LocalDateTime.now()));
-        return new ResponseEntity<>(Student.studentList, HttpStatus.OK);
+
+    @GetMapping
+    public ResponseEntity<?>listAllStudenty(){
+        return new ResponseEntity<>(studentyRepository.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getStudentyById(@PathVariable("id") int id){
-        Student student = new Student();
-        student.setId(id);
-        int index =Student.studentList.indexOf(student);
-        if(index == -1){
+    public ResponseEntity<?> getStudentyById(@PathVariable("id") Long id){
+        Student student = studentyRepository.findOne(id);
+        if(student == null){
             return new ResponseEntity<>(new CustomErrorType("Student not found"),HttpStatus.NOT_FOUND);
         }
-        return  new ResponseEntity<>(Student.studentList.get(index),HttpStatus.OK);
+        return  new ResponseEntity<>(student,HttpStatus.OK);
     }
 
-    @PostMapping("/salvar")
+    @PostMapping
     public ResponseEntity<?>saveStudenty(@RequestBody Student student){
-        Student.studentList.add(student);
-        return new ResponseEntity<>(student,HttpStatus.OK);
+        return new ResponseEntity<>(studentyRepository.save(student),HttpStatus.OK);
     }
+    @DeleteMapping
+    public ResponseEntity<?> deleteStudenty(@PathVariable Long id){
+       studentyRepository.delete(id);
+        return  new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping
+    public ResponseEntity<?> updateStudenty (@RequestBody Student student){
+        studentyRepository.save(student);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 
 
 
