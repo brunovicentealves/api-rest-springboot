@@ -1,13 +1,12 @@
 package br.com.spring.awesome.model;
 
 import javax.persistence.Entity;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Entity
-public class Student  extends AbstractEntity{
+public class Student extends AbstractEntity  {
 
     private String name;
 

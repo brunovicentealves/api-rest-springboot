@@ -26,4 +26,13 @@ public class AbstractEntity implements Serializable {
     public int hashCode() {
         return Objects.hash(Id);
     }
+
+
+    public Long getId() {
+        return Id;
+    }
+
+    public void setId(Long id) {
+        Id = id;
+    }
 }
