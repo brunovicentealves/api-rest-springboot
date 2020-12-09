@@ -1,0 +1,15 @@
+version: '3.3'
+services:
+  db:
+    image: mariadb
+    container_name: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: root@123
+      MYSQL_DATABASE: mariadb
+    ports:
+    - "3306:3306"
+    volumes:
+    - mariadb:/var/lib/mysql
+
+volumes:
+  mariadb:
