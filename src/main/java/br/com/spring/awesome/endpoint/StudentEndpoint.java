@@ -2,9 +2,12 @@ package br.com.spring.awesome.endpoint;
 
 
 import br.com.spring.awesome.Repository.StudentyRepository;
+import br.com.spring.awesome.dto.StudentPostRequestBody;
+import br.com.spring.awesome.dto.StudentputRequestBody;
 import br.com.spring.awesome.error.CustomErrorType;
 import br.com.spring.awesome.error.ResourceNotFoundException;
 import br.com.spring.awesome.model.Student;
+import br.com.spring.awesome.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,18 +16,18 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("students")
 public class StudentEndpoint {
-
-
+    @Autowired
     private StudentyRepository studentyRepository;
+    private StudentService studentService;
 
     @Autowired
-    public StudentEndpoint(StudentyRepository studentyRepository) {
-        this.studentyRepository = studentyRepository;
+    public StudentEndpoint(StudentService studentService) {
+        this.studentService = studentService;
     }
 
     @GetMapping
     public ResponseEntity<?>listAllStudenty(){
-        return new ResponseEntity<>(studentyRepository.findAll(), HttpStatus.OK);
+        return new ResponseEntity<>(studentService.listAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -39,20 +42,19 @@ public class StudentEndpoint {
     }
 
     @PostMapping
-    public ResponseEntity<?>saveStudenty(@RequestBody Student student){
-        return new ResponseEntity<>(studentyRepository.save(student),HttpStatus.CREATED);
+    public ResponseEntity<?>saveStudenty(@RequestBody StudentPostRequestBody studentPostRequestBody){
+        return new ResponseEntity<>(studentService.save(studentPostRequestBody),HttpStatus.CREATED);
     }
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteStudenty(@PathVariable Long id){
         verifyIfStudentExists(id);
-       studentyRepository.delete(id);
+       studentService.delete(id);
         return  new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping
-    public ResponseEntity<?> updateStudenty (@RequestBody Student student){
-        verifyIfStudentExists(student.getId());
-        studentyRepository.save(student);
+    public ResponseEntity<?> updateStudenty (@RequestBody StudentputRequestBody studentputRequestBody ){
+        studentService.replice(studentputRequestBody);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

@@ -10,4 +10,5 @@ import java.util.List;
 public interface StudentyRepository extends CrudRepository<Student,Long> {
 
     List<Student> findByNameIgnoreCaseContaining(String name);
+
 }
